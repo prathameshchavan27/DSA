@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int nextGreaterElement(int n) {
+        vector<int> ng;
+        while(n>0){
+            ng.push_back(n%10);
+            n /= 10;
+        }
+        reverse(ng.begin(),ng.end());
+        int i=ng.size()-1;
+        bool check=false;
+        for(;i>0;i--){
+            if(ng[i]>ng[i-1]){
+                i--;
+                check=true;
+                break;
+            }
+        }
+        if(!check){
+            return -1;
+        }
+        for(int j=ng.size()-1;j>i;j--){
+            if(ng[j]>ng[i]){
+                int temp = ng[j];
+                ng[j] = ng[i];
+                ng[i] = temp;
+                break;
+            }
+        }
+        reverse(ng.begin()+i+1,ng.end());
+        long long ans = 0;
+        for(int i=0;i<ng.size();i++){
+            ans = ans*10+ng[i];
+        }
+        if(ans<=pow(2, 31)-1){
+            return (int)ans;
+        }
+        return -1;
+    }
+};
