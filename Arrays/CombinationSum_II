@@ -1,0 +1,49 @@
+/*
+Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
+Each number in candidates may only be used once in the combination.
+Note: The solution set must not contain duplicate combinations.
+
+Example 1:
+
+Input: candidates = [10,1,2,7,6,1,5], target = 8
+Output: 
+[
+[1,1,6],
+[1,2,5],
+[1,7],
+[2,6]
+]
+*/
+
+class Solution {
+public:
+    map<vector<int>,int> mp;
+    void helper(int idx,vector<int>& candidates, int target,vector<int>& v){
+        if(target<0){
+            return;
+        }
+        if(target==0){
+            sort(v.begin(),v.end());
+            mp[v]++;
+            return;
+        }
+        if(idx==candidates.size()){
+            return;
+        }
+        v.push_back(candidates[idx]);
+        helper(idx+1,candidates,target-candidates[idx],v);
+        v.pop_back();
+        while(idx+1<candidates.size() && candidates[idx]==candidates[idx+1])
+            idx++;
+        helper(idx+1,candidates,target,v);
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<vector<int>> ans;
+        vector<int> v;
+        sort(candidates.begin(),candidates.end());
+        helper(0,candidates,target,v);
+        for (auto i : mp)
+            ans.push_back(i.first);
+        return ans;
+    }
+};
