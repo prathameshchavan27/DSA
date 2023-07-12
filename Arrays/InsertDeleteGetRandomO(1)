@@ -1,0 +1,32 @@
+class RandomizedSet {
+public:
+    map<int,int> map;
+    vector<int> rem;
+    RandomizedSet() {
+        
+    }
+    
+    bool insert(int val) {
+        if(map.find(val)!=map.end()){
+            return false;
+        }
+        map[val] = rem.size();
+        rem.push_back(val);
+        return true;
+    }
+    
+    bool remove(int val) {
+        if(map.find(val)==map.end())
+            return false;
+        int pos = map[val];
+        map[rem[rem.size()-1]] = pos;
+        map.erase(val);
+        rem[pos] = rem[rem.size()-1];
+        rem.pop_back();
+        return true;
+    }
+    
+    int getRandom() {
+        return rem[rand()%rem.size()];
+    }
+};
