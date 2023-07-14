@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        unordered_map<char,int> map1;
+        unordered_map<char,int> map2;
+        vector<int> ans;
+        if(p.length()>s.length())
+            return ans;
+        for(int i=0;i<p.length();i++){
+            map1[p[i]]+=1;
+            map2[s[i]]+=1;
+        }
+        if(map1==map2){
+            ans.push_back(0);
+        }
+        int n = p.length();
+        int l = 0;
+        for(int i=n;i<s.length();i++){
+            map2[s[i]]+=1;
+            map2[s[l]]-=1;
+            if(map2[s[l]]==0)
+                map2.erase(s[l]);
+            l+=1;
+            if(map1==map2){
+                ans.push_back(l);
+            }
+        }
+        return ans;
+    }
+};
