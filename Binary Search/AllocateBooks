@@ -1,0 +1,34 @@
+int countBook(vector<int> &A,int maxPages){
+    int books = 1;
+    int pages = 0;
+    for(int i=0;i<A.size();i++){
+        if(pages+A[i]<=maxPages){
+            pages+=A[i];
+        }else {
+            pages = A[i];
+            books++;
+        }
+    }
+    return books;
+}
+int Solution::books(vector<int> &A, int B) {
+    if(B>A.size()){
+        return -1;
+    }
+    int low = 0,high=0;
+    int ans = -1;
+    for(int i=0;i<A.size();i++){
+        low = max(low,A[i]);
+        high += A[i];
+    }
+    while(low<=high){
+        int mid = (low+high)/2;
+        int books = countBook(A,mid);
+        if(books>B){
+            low = mid+1;
+        }else{
+            high = mid-1;
+        }
+    }
+    return low;
+}
