@@ -1,0 +1,72 @@
+class LRUCache {
+public:
+    struct ListNode{
+        int key;
+        int val;
+        ListNode* prev;
+        ListNode* next;
+        ListNode(int key,int val){
+            this->key = key;
+            this->val = val;
+        }
+    };
+    unordered_map<int,ListNode*> mp;
+    int n;
+    ListNode* head;
+    ListNode* tail;
+    LRUCache(int capacity) {
+        n = capacity;
+        head = new ListNode(-1,-1);
+        tail = new ListNode(-1,-1);
+        head->next = tail;
+        tail->prev = head;
+    }
+    
+    int get(int key) {
+        if(mp.count(key)){
+            ListNode* node = mp[key];
+            removeNode(node);
+            addToEnd(node);
+            return node->val;
+        }
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        if(mp.count(key)){
+            ListNode* node = mp[key];
+            node->val = value;
+            removeNode(node);
+            addToEnd(node);
+        }else{
+            if(mp.size()==n){
+                ListNode* toRemove = head->next;
+                mp.erase(toRemove->key);
+                removeNode(toRemove);
+                delete toRemove;
+            }
+            ListNode* node = new ListNode(key,value);
+            addToEnd(node);
+            mp[key] = node;
+        }
+    }
+
+    void removeNode(ListNode* node){
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+    }
+
+    void addToEnd(ListNode* node){
+        node->prev = tail->prev;
+        tail->prev->next = node;
+        node->next = tail;
+        tail->prev = node;
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
