@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int histogram(vector<int>& arr){
+        stack<int> st;
+        int n = arr.size();
+        int leftSmall[n], rightSmall[n];
+        for(int i=0;i<arr.size();i++){
+            while(!st.empty() && arr[st.top()]>=arr[i]){
+                st.pop();
+            }
+            if(st.empty())
+                leftSmall[i] = 0;
+            else{
+                leftSmall[i] = st.top()+1;
+            }
+            st.push(i);
+        }
+        while(!st.empty())
+            st.pop();
+        for(int i=n-1;i>=0;i--){
+            while(!st.empty() && arr[st.top()]>=arr[i]){
+                st.pop();
+            }
+            if(st.empty())
+                rightSmall[i] = n-1;
+            else
+                rightSmall[i] = st.top()-1;
+            st.push(i);
+        }
+        int area = 0;
+        for(int i=0;i<n;i++){
+            int a = ((rightSmall[i]-leftSmall[i])+1)*arr[i];
+            area = max(area,a);
+        }
+        return area;
+    }
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int n = matrix[0].size();
+        int ans = 0;
+        vector<int> arr(n,0);
+        for(int i=0;i<matrix.size();i++){
+            for(int j=0;j<matrix[i].size();j++){
+                int t = matrix[i][j]-'0';
+                if(t==0){
+                    arr[j] = 0;
+                }else{
+                    arr[j]++;
+                }
+            }
+            ans = max(ans,histogram(arr));
+        }
+        return ans;
+    }
+};
