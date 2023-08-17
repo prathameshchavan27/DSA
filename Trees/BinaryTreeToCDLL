@@ -1,0 +1,30 @@
+class Solution
+{
+  public:
+    //Function to convert binary tree into circular doubly linked list.
+    void helper(Node* root,vector<Node*>& inorder){
+        if(root==NULL){
+            return;
+        }
+        helper(root->left,inorder);
+        inorder.push_back(root);
+        helper(root->right,inorder);
+    }
+    Node *bTreeToCList(Node *root)
+    {
+    //add code here.
+        vector<Node*> inorder;
+        helper(root,inorder);
+        struct Node* head = inorder[0];
+        struct Node* ans = head;
+        for(int i=1;i<inorder.size();i++){
+            head->right = inorder[i];
+            inorder[i]->left = head;
+            inorder[i]->right = NULL;
+            head = head->right;
+        }
+        head->right = ans;
+        ans->left = head;
+        return ans;
+    }
+};
