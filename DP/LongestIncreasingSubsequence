@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int subseq(int i,vector<int>& nums,int prev,int **arr){
+        if(i==nums.size()){
+            return 0;
+        }
+        if(arr[i][prev+1]!=-1)
+            return arr[i][prev+1];
+        int len = 0+subseq(i+1,nums,prev,arr);
+        if(prev==-1 || nums[i]>nums[prev])
+            len = max(len,1+subseq(i+1,nums,i,arr));
+        arr[i][prev+1] = len;
+        return len;
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        int **arr = new int*[n];
+        for(int i=0;i<n;i++){
+            arr[i] = new int[n+1];
+            for(int j=0;j<=n;j++){
+                arr[i][j] = -1;
+            }
+        }
+        return subseq(0,nums,-1,arr);
+    }
+};
